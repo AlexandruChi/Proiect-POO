@@ -6,6 +6,7 @@
 #include "Enemy.h"
 #include "GameObject.h"
 #include "Colectables.h"
+#include "ExitBlock.h"
 
 TextureUI_path setUIpaths();
 
@@ -15,9 +16,12 @@ UI* ui;
 Player* player;
 Enemy** enemy;
 GameObject** collectables;
+ExitBlock* exitLevel;
 
 unsigned char nrEnemy;
 size_t nrClc;
+unsigned int (*exitLvl)[2];
+unsigned int (*clcLvl)[3];
 
 Game::Game(): isRunning(false), window(nullptr), renderer(nullptr), mouseLeft(false) {}
 
@@ -84,8 +88,10 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	}
 
 	nrClc = nrClcLvl1;
+	exitLvl = &exitLvl1;
+	clcLvl = clcLvl1;
 
-	collectables = GameObject::createGameObjects(clcLvl1, nrClc, renderer);
+	collectables = GameObject::createGameObjects(clcLvl, nrClc, renderer);
 
 	game = this;
 }
@@ -172,6 +178,18 @@ void Game::handleEvents()
 		default:
 			break;
 	}
+
+	if (player->isDead()) {
+		isRunning = false;
+	}
+
+	if (exitLevel == nullptr) {
+		if (player->collectedAll()) {
+			exitLevel = new ExitBlock(renderer, (*exitLvl)[0], (*exitLvl)[1]);
+		}
+	} else if (player->getPosition().x == exitLevel->getX() and player->getPosition().y == exitLevel->getY()) {
+		nextLevel();
+	}
 }
 void Game::update() const
 {
@@ -199,6 +217,10 @@ void Game::render() const
 		if (collectables[i] != nullptr) {
 			collectables[i]->Render();
 		}
+	}
+
+	if (exitLevel != nullptr) {
+		exitLevel->Render();
 	}
 
 	for (unsigned char i = 0; i < map->getNrEnemy(); i++) {
@@ -232,4 +254,49 @@ Character* Game::searchHitbox(const Position& position) const {
 		}
 	}
 	return 0;
+}
+
+void Game::nextLevel() {
+
+	if (!map->loadNextMap()) {
+		isRunning = false;
+	} else {
+		ui->nextLevel();
+		player->changeLevel(map->getCurentMap());
+
+		delete[] enemy;
+
+		nrEnemy = map->getNrEnemy();
+
+		enemy = new Enemy * [nrEnemy];
+
+		for (unsigned char i = 0; i < nrEnemy; i++) {
+			enemy[i] = new Enemy("assets/enemy.png", "assets/enemy_r.png", renderer);
+			enemy[i]->init();
+		}
+
+		delete exitLevel;
+		delete[] collectables;
+
+		switch (map->getCurentMap()) {
+			case 1:
+				nrClc = nrClcLvl1;
+				exitLvl = &exitLvl1;
+				clcLvl = clcLvl1;
+				break;
+			case 2:
+				nrClc = nrClcLvl2;
+				exitLvl = &exitLvl2;
+				clcLvl = clcLvl2;
+				break;
+			case 3:
+				nrClc = nrClcLvl3;
+				exitLvl = &exitLvl3;
+				clcLvl = clcLvl3;
+				break;
+		}
+
+		collectables = GameObject::createGameObjects(clcLvl, nrClc, renderer);
+		exitLevel = 0;
+	}
 }

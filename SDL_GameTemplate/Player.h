@@ -5,6 +5,8 @@
 class Player : public Character {
 	unsigned char collected, medals, kills;
 
+	bool clcAll;
+
 	Weapon* weapon;
 	Weapon** altWeapon;
 public:
@@ -21,6 +23,9 @@ public:
 	void addKill();
 	void addMedal();
 	void addCollected();
+
+	bool collectedAll();
+	void changeLevel(unsigned char level);
 
 	void changeWeapon(unsigned char weapon);
 };

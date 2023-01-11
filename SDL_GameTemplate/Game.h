@@ -18,6 +18,8 @@ public:
 	bool running() const { return isRunning;  }
 
 	Character* searchHitbox(const Position& position) const;
+
+	void nextLevel();
 private:
 	bool isRunning;
 	SDL_Window* window;

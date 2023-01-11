@@ -58,6 +58,9 @@
     <ClCompile Include="Medkit.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="ExitBlock.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -112,6 +115,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Colectables.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ExitBlock.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -218,6 +224,9 @@
       <Filter>assets</Filter>
     </Image>
     <Image Include="assets\medkit.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\exit.png">
       <Filter>assets</Filter>
     </Image>
   </ItemGroup>

@@ -34,9 +34,13 @@ Player::Player(const char* path_r, const char* path_l, SDL_Renderer* renderer) {
     collected = 0;
     medals = 0;
     kills = 0;
+
+    clcAll = false;
 }
 
-Player::~Player() {}
+Player::~Player() {
+    delete[] altWeapon;
+}
 
 
 void Player::init()
@@ -45,52 +49,60 @@ void Player::init()
    srcRect.w = srcRect.h = 32;
    destRect.w = destRect.h = 64;
 
-   destRect.x = 32;
-   destRect.y = 64;
+   position.x = playerSpawnXLvl1;
+   position.y = playerSpawnYLvl1;
 
-   position.xPX = destRect.x + characterDeltaX;
-   position.yPX = destRect.y + characterDeltaY;
+   position.xPX = position.x * 32 + 32 / 2;
+   position.yPX = position.y * 32 + 32 / 2;
 
    position.tmpX = position.xPX;
    position.tmpY = position.yPX;
-
-   position.x = position.xPX / 32;
-   position.y = position.yPX / 32;
 
    speed = 1;
    dead = false;
 }
 
 void Player::update() {
-    for (size_t i = 0; i < nrClc; i++) {
-        if (collectables[i] != nullptr) {
-            if (collectables[i]->getX() == position.x and collectables[i]->getY() == position.y) {
-                switch (collectables[i]->getType()) {
-                    case document:
-                        addCollected();
-                        delete collectables[i];
-                        collectables[i] = nullptr;
-                        break;
-                    case ammo:
-                        for (unsigned char j = 0; j < ((Ammo*)collectables[i])->getAmmo(); j++) {
-                            altWeapon[1]->addAmmo();
-                        }
-                        delete collectables[i];
-                        collectables[i] = nullptr;
-                        break;
-                    case medkit:
-                        if (health < maxHealth) {
-                            incHealth(1);
+
+    if (health == 0) {
+        dead = true;
+    } else {
+
+        if (collected == 3) {
+            addMedal();
+            clcAll = true;
+            collected = 0;
+        }
+
+        for (size_t i = 0; i < nrClc; i++) {
+            if (collectables[i] != nullptr) {
+                if (collectables[i]->getX() == position.x and collectables[i]->getY() == position.y) {
+                    switch (collectables[i]->getType()) {
+                        case document:
+                            addCollected();
                             delete collectables[i];
                             collectables[i] = nullptr;
-                        }
-                        break;
+                            break;
+                        case ammo:
+                            for (unsigned char j = 0; j < ((Ammo*)collectables[i])->getAmmo(); j++) {
+                                altWeapon[1]->addAmmo();
+                            }
+                            delete collectables[i];
+                            collectables[i] = nullptr;
+                            break;
+                        case medkit:
+                            if (health < maxHealth) {
+                                incHealth(1);
+                                delete collectables[i];
+                                collectables[i] = nullptr;
+                            }
+                            break;
+                    }
                 }
             }
         }
+        Character::update();
     }
-
-    Character::update();
     setUI();
 }
 
@@ -140,6 +152,35 @@ void Player::addMedal() {
 
 void Player::addCollected() {
     collected++;
+}
+
+bool Player::collectedAll() {
+    return clcAll;
+}
+
+void Player::changeLevel(unsigned char level) {
+    clcAll = false;
+
+    switch (level) {
+        case 1:
+            position.x = playerSpawnXLvl1;
+            position.y = playerSpawnYLvl1;
+            break;
+        case 2:
+            position.x = playerSpawnXLvl2;
+            position.y = playerSpawnYLvl2;
+            break;
+        case 3:
+            position.x = playerSpawnXLvl3;
+            position.y = playerSpawnYLvl3;
+            break;
+    }
+
+    position.xPX = position.x * 32 + 32 / 2;
+    position.yPX = position.y * 32 + 32 / 2;
+
+    position.tmpX = position.xPX;
+    position.tmpY = position.yPX;
 }
 
 void Player::changeWeapon(unsigned char weapon) {

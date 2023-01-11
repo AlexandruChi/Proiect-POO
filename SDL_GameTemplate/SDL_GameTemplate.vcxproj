@@ -138,6 +138,7 @@
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Document.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="ExitBlock.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="Document.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="ExitBlock.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Levels.h" />
@@ -182,6 +184,7 @@
     <Image Include="assets\collected_2.png" />
     <Image Include="assets\enemy.png" />
     <Image Include="assets\enemy_r.png" />
+    <Image Include="assets\exit.png" />
     <Image Include="assets\flooring.png" />
     <Image Include="assets\ground.png" />
     <Image Include="assets\health_0.png" />

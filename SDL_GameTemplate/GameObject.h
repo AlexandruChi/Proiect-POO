@@ -3,7 +3,7 @@
 #include "Character.h"
 
 enum GameObjectType {
-	document, ammo, medkit
+	document, ammo, medkit, exitBlock
 };
 
 class GameObject

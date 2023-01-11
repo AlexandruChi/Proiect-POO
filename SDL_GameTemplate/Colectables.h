@@ -7,3 +7,7 @@ unsigned int clcLvl3[8][3] = { {0, 7, 6}, {0, 3, 16} , {0, 15, 17}, {1, 22, 4}, 
 size_t nrClcLvl1 = 8;
 size_t nrClcLvl2 = 8;
 size_t nrClcLvl3 = 8;
+
+unsigned int exitLvl1[2] = { 23, 17 };
+unsigned int exitLvl2[2] = { 23, 17 };
+unsigned int exitLvl3[2] = { 23, 17 };
