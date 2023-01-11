@@ -27,11 +27,26 @@ Game::Game(): isRunning(false), window(nullptr), renderer(nullptr), mouseLeft(fa
 
 Game::~Game()
 {
-   delete player;
-   delete map;
-   delete ui;
-   delete[] enemy;
-   delete[] collectables;
+	if (player != nullptr) {
+		delete player;
+		player = nullptr;
+	}
+	if (map != nullptr) {
+		delete map;
+		map = nullptr;
+	}
+	if (map != nullptr) {
+		delete ui;
+		ui = nullptr;
+	}
+	if (enemy != nullptr) {
+		delete[] enemy;
+		enemy = nullptr;
+	}
+	if (collectables != nullptr) {
+		delete[] collectables;
+		collectables = nullptr;
+	}
 
    TTF_Quit();
 }
@@ -81,10 +96,9 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	}
 	for (unsigned char i = 0; i < nrEnemy; i++) {
 		enemy[i] = new Enemy("assets/enemy.png", "assets/enemy_r.png", renderer);
-		if (enemy[i] == nullptr) {
-			exit(1);
+		if (enemy[i] != nullptr) {
+			enemy[i]->init();
 		}
-		enemy[i]->init();
 	}
 
 	nrClc = nrClcLvl1;
@@ -200,7 +214,7 @@ void Game::update() const
 			enemy[i]->update();
 			if (enemy[i]->isDead()) {
 				delete enemy[i];
-				enemy[i] = 0;
+				enemy[i] = nullptr;
 				player->addKill();
 			}
 		}
@@ -264,19 +278,30 @@ void Game::nextLevel() {
 		ui->nextLevel();
 		player->changeLevel(map->getCurentMap());
 
-		delete[] enemy;
+		if (enemy != nullptr) {
+			delete[] enemy;
+		}
 
 		nrEnemy = map->getNrEnemy();
 
 		enemy = new Enemy * [nrEnemy];
+		if (enemy == nullptr) {
+			exit(1);
+		}
 
 		for (unsigned char i = 0; i < nrEnemy; i++) {
 			enemy[i] = new Enemy("assets/enemy.png", "assets/enemy_r.png", renderer);
-			enemy[i]->init();
+			if (enemy[i] != nullptr) {
+				enemy[i]->init();
+			}
 		}
 
-		delete exitLevel;
-		delete[] collectables;
+		if (exitLevel != nullptr) {
+			delete exitLevel;
+		}
+		if (collectables != nullptr) {
+			delete[] collectables;
+		}
 
 		switch (map->getCurentMap()) {
 			case 1:
@@ -297,6 +322,6 @@ void Game::nextLevel() {
 		}
 
 		collectables = GameObject::createGameObjects(clcLvl, nrClc, renderer);
-		exitLevel = 0;
+		exitLevel = nullptr;
 	}
 }
