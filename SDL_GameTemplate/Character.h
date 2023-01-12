@@ -17,8 +17,8 @@ constexpr auto playerSpawnYLvl1 = 4;
 constexpr auto playerSpawnXLvl2 = 1;
 constexpr auto playerSpawnYLvl2 = 17;
 
-constexpr auto playerSpawnXLvl3 = 1;
-constexpr auto playerSpawnYLvl3 = 17;
+constexpr auto playerSpawnXLvl3 = 2;
+constexpr auto playerSpawnYLvl3 = 18;
 
 enum TravelDirection {
 	stop, up, down, right, left, up_right, up_left, down_right, down_left

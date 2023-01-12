@@ -112,7 +112,22 @@ void Player::setUI() {
     ui->setAmmo(weapon->hasAmmo(ammo), ammo);
     ui->setWeapon(weapon->getType());
     ui->setHealth(health);
-    ui->setCollected(collected);
+
+    if (clcAll) {
+        ui->setCollected(2);
+    } else {
+        switch (collected) {
+            case 0:
+                ui->setCollected(0);
+                break;
+            case 1:
+                ui->setCollected(1);
+                break;
+            default:
+                break;
+        }
+    }
+
     ui->setMedals(medals);
 }
 

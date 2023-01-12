@@ -25,6 +25,7 @@ private:
 	SDL_Texture* flooring;
 	SDL_Texture* wall;
 	SDL_Texture* bridge;
+	SDL_Texture* bridge_r;
 
 	int map[20][25];
 

@@ -12,6 +12,7 @@ Map::Map(SDL_Renderer* renderer)
 	flooring = TextureManager::LoadTexture("assets/flooring.png", renderer);
 	wall = TextureManager::LoadTexture("assets/wall.png", renderer);
 	bridge = TextureManager::LoadTexture("assets/bridge.png", renderer);
+	bridge_r = TextureManager::LoadTexture("assets/bridge_r.png", renderer);
 
 	curentMap = 1;
 	LoadMap(lvl1);
@@ -73,6 +74,9 @@ void Map::DrawMap()
 					TextureManager::Draw(this->bridge, src, dest, renderer);
 					break;
 				}
+				case 5:
+					TextureManager::Draw(this->bridge_r, src, dest, renderer);
+					break;
 				default:
 					break;
 			}
