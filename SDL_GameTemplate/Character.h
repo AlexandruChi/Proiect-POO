@@ -20,21 +20,6 @@ constexpr auto playerSpawnYLvl2 = 17;
 constexpr auto playerSpawnXLvl3 = 2;
 constexpr auto playerSpawnYLvl3 = 18;
 
-enum TravelDirection {
-	stop, up, down, right, left, up_right, up_left, down_right, down_left
-};
-
-struct Position {
-	int x, y;
-	int xPX, yPX;
-	double tmpX, tmpY;
-};
-
-struct Hitbox {
-	int xPX1, yPX1;
-	int xPX2, yPX2;
-};
-
 class Character : public Component {
 protected:
 	SDL_Texture* texture{};
@@ -62,12 +47,12 @@ public:
 	void addMovement(TravelDirection travelDirection);
 	void subMovement(TravelDirection travelDirection);
 
-	Position getPosition();
+	Position getPosition() const;
 
 	void move();
 
-	void decHealth(unsigned char health);
-	void incHealth(unsigned char health);
+	void decHealth(unsigned char health = 1);
+	void incHealth(unsigned char health = 1);
 
 	bool lineOfSight(const Position& position) const;
 

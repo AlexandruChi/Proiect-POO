@@ -99,7 +99,7 @@ void Character::setTex(const char* path_r, const char* path_l)
     texture = altTexture[0];
 }
 
-Position Character::getPosition() {
+Position Character::getPosition() const {
     return position;
 }
 

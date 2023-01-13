@@ -40,9 +40,6 @@
     <ClCompile Include="Character.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Weapon.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Sword.cpp">
       <Filter>Sources</Filter>
     </ClCompile>

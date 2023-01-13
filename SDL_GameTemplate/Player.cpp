@@ -5,12 +5,15 @@
 #include "Rifle.h"
 #include <utility>
 #include "Ammo.h"
+#include "Game.h"
 
 using namespace std;
 
 unsigned long long calculateDistance(pair<long long, long long> A, pair<long long, long long> B);
 
 extern Map* map;
+
+extern Game* game;
 
 extern UI* ui;
 
@@ -24,8 +27,8 @@ Player::Player(const char* path_r, const char* path_l, SDL_Renderer* renderer) {
 
     altWeapon = new Weapon * [2];
 
-    altWeapon[0] = new Sword(0, 1, 128, 0.5);
-    altWeapon[1] = new Rifle(1, 2, 0, 0.3);
+    altWeapon[0] = new Sword(1, 128, 0.5);
+    altWeapon[1] = new Rifle(2, 0, 0.3);
 
     weapon = altWeapon[0];
 
@@ -84,15 +87,13 @@ void Player::update() {
                             collectables[i] = nullptr;
                             break;
                         case ammo:
-                            for (unsigned char j = 0; j < ((Ammo*)collectables[i])->getAmmo(); j++) {
-                                altWeapon[1]->addAmmo();
-                            }
+                            altWeapon[1]->addAmmo(((Ammo*)collectables[i])->getAmmo());
                             delete collectables[i];
                             collectables[i] = nullptr;
                             break;
                         case medkit:
                             if (health < maxHealth) {
-                                incHealth(1);
+                                incHealth();
                                 delete collectables[i];
                                 collectables[i] = nullptr;
                             }
@@ -132,14 +133,7 @@ void Player::setUI() {
 }
 
 void Player::attack(const Position& position) {
-    weapon->decAmmo();
-    if (lineOfSight(position)) {
-        unsigned char range;
-        if (weapon->hasRange(range) and calculateDistance({ this->position.xPX, this->position.yPX }, { position.xPX, position.yPX }) >= range) {
-            return;
-        }
-        weapon->attack(position);
-    }
+    weapon->attack(*this, position);
 }
 
 void Player::addKill() {

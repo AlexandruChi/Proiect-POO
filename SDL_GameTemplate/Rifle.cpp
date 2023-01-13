@@ -3,9 +3,7 @@
 
 extern Game* game;
 
-Rifle::Rifle(unsigned char type, unsigned char damage, unsigned char ammo, double attackDelay) : Weapon(type, damage), ammo(ammo) {
-	getTimer()->duration(attackDelay);
-}
+Rifle::Rifle(unsigned char damage, unsigned char ammo, double attackDelay) : ammo(ammo), damage(damage), attackTimer(attackDelay, true) {}
 
 bool Rifle::hasAmmo(unsigned char& ammo) {
 	ammo = this->ammo;
@@ -16,20 +14,27 @@ bool Rifle::hasRange(unsigned char& range) {
 	return false;
 }
 
-void Rifle::attack(const Position& position) {
-	if (getTimer()->run() and ammo) {
-		Character* character = game->searchHitbox(position);
-		if (character != nullptr) {
-			character->decHealth(getDamage());
+void Rifle::attack(const Component& player, const Position& position) {
+	if (attackTimer.run() and ammo) {
+		decAmmo();
+		Component* character = game->searchHitbox(position);
+		if (character != nullptr and (player.lineOfSight(position) or player.lineOfSight(character->getPosition()))) {
+			character->decHealth(damage);
 		}
 	}
 }
 
-void Rifle::addAmmo() {
-	ammo++;
+unsigned char Rifle::getType() {
+	return 1;
 }
-void Rifle::decAmmo() {
-	if (ammo) {
-		ammo--;
-	}
+
+unsigned char Rifle::getDamage() {
+	return damage;
+}
+
+void Rifle::addAmmo(unsigned char ammo) {
+	this->ammo += ammo;
+}
+void Rifle::decAmmo(unsigned char ammo) {
+	this->ammo -= ammo;
 }

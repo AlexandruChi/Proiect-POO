@@ -152,7 +152,6 @@
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="UI.cpp" />
-    <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ammo.h" />

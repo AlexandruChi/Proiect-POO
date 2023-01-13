@@ -8,6 +8,8 @@
 #include "Colectables.h"
 #include "ExitBlock.h"
 
+using namespace std;
+
 TextureUI_path setUIpaths();
 
 Game* game;
@@ -54,10 +56,10 @@ Game::~Game()
 
 void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
-	int flags = 0;
-	if (fullscreen)
-	{
-		flags = SDL_WINDOW_FULLSCREEN;
+	int flags = SDL_WINDOW_RESIZABLE;
+
+	if (fullscreen) {
+		flags |= SDL_WINDOW_FULLSCREEN;
 	}
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0 and TTF_Init() == 0)
 	{
@@ -81,9 +83,20 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		isRunning = false;
 	}
 
+	SDL_RenderSetLogicalSize(renderer, 800, 640);
+
 	map = new Map(renderer);
+	if (map == nullptr) {
+		cout << "Can not create map" << endl;
+		exit(1);
+	}
+
 
     player = new Player ("assets/player.png", "assets/player_r.png", renderer);
+	if (player == nullptr) {
+		cout << "Can not create player" << endl;
+		exit(1);
+	}
     player->init();
 
     TextureUI_path textureUI_path = setUIpaths();
@@ -92,12 +105,15 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	unsigned char nrEnemy = map->getNrEnemy();
 	enemy = new Enemy * [nrEnemy];
 	if (enemy == nullptr) {
+		cout << "Can not create enemys" << endl;
 		exit(1);
 	}
 	for (unsigned char i = 0; i < nrEnemy; i++) {
 		enemy[i] = new Enemy("assets/enemy.png", "assets/enemy_r.png", renderer);
 		if (enemy[i] != nullptr) {
 			enemy[i]->init();
+		} else {
+			cout << "Can not create a enenmy";
 		}
 	}
 
@@ -123,16 +139,16 @@ void Game::handleEvents()
 			if (event.key.state == SDL_PRESSED) {
 				switch (event.key.keysym.scancode) {
 					case SDL_SCANCODE_W:
-						player->addMovement(up);
+						player->addMovement(TravelDirection::up);
 						break;
 					case SDL_SCANCODE_S:
-						player->addMovement(down);
+						player->addMovement(TravelDirection::down);
 						break;
 					case SDL_SCANCODE_D:
-						player->addMovement(right);
+						player->addMovement(TravelDirection::right);
 						break;
 					case SDL_SCANCODE_A:
-						player->addMovement(left);
+						player->addMovement(TravelDirection::left);
 						break;
 					case SDL_SCANCODE_1:
 						player->changeWeapon(0);
@@ -148,16 +164,16 @@ void Game::handleEvents()
 			if (event.key.state == SDL_RELEASED) {
 				switch (event.key.keysym.scancode) {
 					case SDL_SCANCODE_W:
-						player->subMovement(up);
+						player->subMovement(TravelDirection::up);
 						break;
 					case SDL_SCANCODE_S:
-						player->subMovement(down);
+						player->subMovement(TravelDirection::down);
 						break;
 					case SDL_SCANCODE_D:
-						player->subMovement(right);
+						player->subMovement(TravelDirection::right);
 						break;
 					case SDL_SCANCODE_A:
-						player->subMovement(left);
+						player->subMovement(TravelDirection::left);
 						break;
 				}
 			}
@@ -188,7 +204,7 @@ void Game::handleEvents()
 				}
 			}
 			break;
-		
+
 		default:
 			break;
 	}
