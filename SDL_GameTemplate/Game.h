@@ -5,6 +5,7 @@
 #include "UI.h"
 #include "GameObject.h"
 #include "Player.h"
+#include <vector>
 
 class Game
 {
@@ -28,6 +29,8 @@ public:
 
 	static Component* searchHitbox(const Position& position);
 
+	void componentRenderAll(std::vector<Component*> components) const;
+
 	void nextLevel();
 private:
 	bool isRunning;
@@ -42,6 +45,8 @@ private:
 	size_t nrClc;
 	unsigned int(*exitLvl)[2];
 	unsigned int(*clcLvl)[3];
+
+	double aspectRatio;
 
 	bool mouseLeft;
 };

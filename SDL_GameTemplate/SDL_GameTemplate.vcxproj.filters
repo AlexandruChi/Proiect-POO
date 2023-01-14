@@ -64,6 +64,9 @@
     <ClCompile Include="printError.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="sortComponents.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

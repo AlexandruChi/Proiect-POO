@@ -9,8 +9,8 @@ void printError(const char* messege);
 using namespace std;
 
 //Screen dimension constants
-const int SCREEN_WIDTH = 1600;
-const int SCREEN_HEIGHT = 1280;
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 640;
 
 int main(int argc, char* args[])
 {
@@ -32,7 +32,7 @@ int main(int argc, char* args[])
 		exit(1);
 	}
 
-	game->init("Beim letzten Weltkrieg", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, false);
+	game->init("Beim letzten Krieg", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, false);
 
 	while (game->running())
 	{

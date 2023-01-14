@@ -7,8 +7,10 @@
 #include "GameObject.h"
 #include "ExitBlock.h"
 #include "LevelManager.h"
+#include <algorithm>
 
 void printError(const char* messege);
+bool sortComponents(Component* component1, Component* component2);
 
 using namespace std;
 
@@ -22,7 +24,7 @@ Player* Game::player;
 
 TextureUI_path setUIpaths();
 
-Game::Game(): isRunning(false), window(nullptr), renderer(nullptr), mouseLeft(false), nrEnemy(0), nrClc(0), exitLvl(0), clcLvl(0) {}
+Game::Game(): isRunning(false), window(nullptr), renderer(nullptr), mouseLeft(false), nrEnemy(0), nrClc(0), exitLvl(0), clcLvl(0), aspectRatio(0) {}
 
 Game::~Game()
 {
@@ -56,32 +58,43 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	int flags = SDL_WINDOW_RESIZABLE;
 
 	if (fullscreen) {
-		flags |= SDL_WINDOW_FULLSCREEN;
+		flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 	}
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0 and TTF_Init() == 0)
 	{
 		std::cout << "Subsystems initialized" << std::endl;
-		auto window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
+		window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
 		if (window!=nullptr)
 		{
 			std::cout << "Window created" << std::endl;
+		} else {
+			printError(SDL_GetError());
 		}
  
 		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 		if (renderer != nullptr)
 		{
-			SDL_SetRenderDrawColor(renderer, 255, 255, 255,255);
+			if (fullscreen) {
+				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+			} else {
+				SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+			}
 			std::cout << "Renderer created" << std::endl;
+		} else {
+			printError(SDL_GetError());
 		}
+
 		isRunning = true;
 	}
 	else
 	{
-		printError("SDL initialization failed");
+		printError(SDL_GetError());
 		isRunning = false;
 	}
 
 	SDL_RenderSetLogicalSize(renderer, 800, 640);
+
+	aspectRatio = 800. / 640;
 
 	map = new Map(renderer);
 	if (map == nullptr) {
@@ -100,7 +113,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     TextureUI_path textureUI_path = setUIpaths();
     ui = new UI(&textureUI_path, renderer);
 
-	unsigned int nrEnemy = map->getNrEnemy();
+	nrEnemy = map->getNrEnemy();
 	enemy = new Component * [nrEnemy];
 	if (enemy == nullptr) {
 		printError("Can not create enemys");
@@ -119,6 +132,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	nrClc = LevelManager::getNrColectables();
 	exitLvl = LevelManager::getExit();
 	clcLvl = LevelManager::getCollectables();
+
 
 	collectables = GameObject::createGameObjects(clcLvl, nrClc, renderer);
 
@@ -154,6 +168,21 @@ void Game::handleEvents()
 						break;
 					case SDL_SCANCODE_2:
 						player->changeWeapon(1);
+						break;
+					case SDL_SCANCODE_F11:
+						if (SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN) {
+							if (SDL_SetWindowFullscreen(window, NULL)) {
+								printError(SDL_GetError());
+							} else {
+								SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+							}
+						} else {
+							if (SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN)) {
+								printError(SDL_GetError());
+							} else {
+								SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+							}
+						}
 						break;
 				}
 			}
@@ -204,6 +233,17 @@ void Game::handleEvents()
 			}
 			break;
 
+		case SDL_WINDOWEVENT:
+			if (event.window.event == SDL_WINDOWEVENT_RESIZED and !(SDL_GetWindowFlags(window) & (SDL_WINDOW_MAXIMIZED | SDL_WINDOW_FULLSCREEN))) {
+				int w, h;
+				SDL_GetWindowSize(window, &w, &h);
+
+				if ((double)w / h != aspectRatio) {
+					w = (int)((double)h * aspectRatio);
+					SDL_SetWindowSize(window, w, h);
+				}
+			}
+
 		default:
 			break;
 	}
@@ -228,7 +268,7 @@ void Game::update() const
 {
 	player->update();
 
-	for (unsigned char i = 0; i < map->getNrEnemy(); i++) {
+	for (unsigned char i = 0; i < nrEnemy; i++) {
 		if (enemy[i]) {
 			enemy[i]->update();
 			if (enemy[i]->isDead()) {
@@ -256,13 +296,18 @@ void Game::render() const
 		exitLevel->Render();
 	}
 
-	for (unsigned char i = 0; i < map->getNrEnemy(); i++) {
-		if (enemy[i]) {
-			enemy[i]->draw();
+	vector<Component*> components;
+
+	components.push_back(player);
+
+	for (size_t i = 0; i < nrEnemy; i++) {
+		if (enemy[i] != nullptr) {
+			components.push_back(enemy[i]);
 		}
 	}
 
-	player->draw();
+	componentRenderAll(components);
+
 	ui->draw();
 
 	SDL_RenderPresent(renderer);
@@ -287,6 +332,14 @@ Component* Game::searchHitbox(const Position& position) {
 		}
 	}
 	return 0;
+}
+
+void Game::componentRenderAll(vector<Component*> components) const {
+	sort(components.begin(), components.end(), sortComponents);
+
+	for (vector<Component*>::iterator i = components.begin(); i != components.end(); i++) {
+		(*i)->draw();
+	}
 }
 
 void Game::nextLevel() {
