@@ -137,6 +137,14 @@ bool LevelManager::readLevel(unsigned char level) {
         }
     } while (strcmp(buffer.c_str(), "end") and cin >> buffer);
 
+    if (foundNrClc and !foundClcLvl) {
+        string error = "Level ";
+        error += to_string(level);
+        error += ": nrClc must be placed before Clc in campaine file";
+        printError(error.c_str());
+        exit(1);
+    }
+
     if (!foundNrEnemy or !foundNrClc or !foundLvl or !foundExitLvl or !foundClcLvl or !foundPlayerSpawn) {
         string error = "Can not read data for level ";
         error += to_string(level);

@@ -20,7 +20,8 @@ bool Sword::hasRange(unsigned char& range) {
 void Sword::attack(const Component& player, const Position& position) {
 	if (attackTimer.run()) {
 		Component* character = Game::searchHitbox(position);
-		if (character != nullptr and (calculateDistance({ player.getPosition().x, player.getPosition().y}, {position.x, position.y}) or calculateDistance({ player.getPosition().x, player.getPosition().y }, { character->getPosition().x, character->getPosition().y}))) {
+		if (character != nullptr and (calculateDistance({ player.getPosition().x, player.getPosition().y}, {position.x, position.y}) <= range or calculateDistance({ player.getPosition().x, player.getPosition().y }, { character->getPosition().x, character->getPosition().y}) <= range)) {
+			if (player.lineOfSight(character->getPosition()) or (player.lineOfSight(position) and !(player.getPosition().y > position.y)))
 			character->decHealth(getDamage());
 		}
 	}
