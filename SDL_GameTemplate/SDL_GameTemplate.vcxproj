@@ -23,6 +23,7 @@
     <ProjectGuid>{FBBD6837-CB29-4663-9FEF-227009B44838}</ProjectGuid>
     <RootNamespace>SDLGameTemplate</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Beim letzten Weltkrieg</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
