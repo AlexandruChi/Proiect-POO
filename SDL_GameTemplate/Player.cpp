@@ -7,11 +7,11 @@
 #include "Ammo.h"
 #include "Game.h"
 
+void printError(const char* messege);
+
 using namespace std;
 
 unsigned long long calculateDistance(pair<long long, long long> A, pair<long long, long long> B);
-
-
 
 extern size_t nrClc;
 
@@ -20,9 +20,18 @@ Player::Player(const char* path_r, const char* path_l, SDL_Renderer* renderer) {
     setTex(path_r, path_l);
 
     altWeapon = new Weapon * [2];
+    if (altWeapon == nullptr) {
+        printError("Can not create weapons");
+        exit(1);
+    }
 
     altWeapon[0] = new Sword(1, 128, 0.5);
     altWeapon[1] = new Rifle(2, 0, 0.3);
+
+    if (altWeapon[0] == nullptr or altWeapon[1] == nullptr) {
+        printError("Can not load all weapons");
+        exit(1);
+    }
 
     weapon = altWeapon[0];
 

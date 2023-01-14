@@ -6,7 +6,7 @@ class Enemy : public Character {
 	unsigned int range;
 	unsigned char damage;
 
-	Timer* changeDirectionTimer, * attackTimer;
+	Timer changeDirectionTimer, attackTimer;
 
 	Hitbox hitbox;
 public:

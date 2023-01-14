@@ -3,6 +3,8 @@
 
 #include "Levels.h"
 
+#include "LevelManager.h"
+
 Map::Map(SDL_Renderer* renderer)
 {
 	this->renderer = renderer;
@@ -15,6 +17,7 @@ Map::Map(SDL_Renderer* renderer)
 	bridge_r = TextureManager::LoadTexture("assets/bridge_r.png", renderer);
 
 	curentMap = 1;
+
 	LoadMap(lvl1);
 
 	src.x = 0;

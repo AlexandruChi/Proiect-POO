@@ -4,6 +4,8 @@
 #include "fstream"
 #include <iostream>
 
+void printError(const char* messege);
+
 using namespace std;
 
 //Screen dimension constants
@@ -23,6 +25,12 @@ int main(int argc, char* args[])
 	cout.rdbuf(log);
 
 	Game *game = new Game();
+	
+	if (game == nullptr) {
+		printError("Can not create game object");
+		logFile.close();
+		exit(1);
+	}
 
 	game->init("Beim letzten Weltkrieg", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, true);
 
@@ -42,5 +50,6 @@ int main(int argc, char* args[])
 
 	game->clean();
 	delete game;
+	logFile.close();
 	return 0;
 }

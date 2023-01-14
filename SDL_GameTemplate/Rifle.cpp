@@ -16,7 +16,7 @@ void Rifle::attack(const Component& player, const Position& position) {
 	if (attackTimer.run() and ammo) {
 		decAmmo();
 		Component* character = Game::searchHitbox(position);
-		if (character != nullptr and (player.lineOfSight(position) or player.lineOfSight(character->getPosition()))) {
+		if (character != nullptr and (player.lineOfSight(character->getPosition()) or (player.lineOfSight(position) and !(player.getPosition().y > position.y)))) {
 			character->decHealth(damage);
 		}
 	}

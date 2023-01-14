@@ -6,18 +6,36 @@
 #include "Ammo.h"
 #include "Medkit.h"
 
+void printError(const char* messege);
+
 GameObject** GameObject::createGameObjects(unsigned int(*v)[3], size_t nr, SDL_Renderer* renderer) {
 	GameObject** objects = new GameObject * [nr];
+	if (objects == nullptr) {
+		printError("Can not create objects");
+		exit(1);
+	}
 	for (size_t i = 0; i < nr; i++) {
 		switch (v[i][0]) {
 			case document:
 				objects[i] = new Document(renderer, v[i][1], v[i][2]);
+				if (objects[i] == nullptr) {
+					printError("Can not create object Document");
+					exit(1);
+				}
 				break;
 			case ammo:
 				objects[i] = new Ammo(renderer, v[i][1], v[i][2]);
+				if (objects[i] == nullptr) {
+					printError("Can not create object Ammo");
+					exit(1);
+				}
 				break;
 			case medkit:
 				objects[i] = new Medkit(renderer, v[i][1], v[i][2]);
+				if (objects[i] == nullptr) {
+					printError("Can not create object Medkit");
+					exit(1);
+				}
 				break;
 		}
 	}

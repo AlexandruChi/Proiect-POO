@@ -8,6 +8,8 @@
 #include "Colectables.h"
 #include "ExitBlock.h"
 
+void printError(const char* messege);
+
 using namespace std;
 
 Component** Game::enemy;
@@ -80,6 +82,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	}
 	else
 	{
+		printError("SDL initialization failed");
 		isRunning = false;
 	}
 
@@ -87,14 +90,14 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 	map = new Map(renderer);
 	if (map == nullptr) {
-		cout << "Can not create map" << endl;
+		printError("Can not create map");
 		exit(1);
 	}
 
 
     player = new Player ("assets/player.png", "assets/player_r.png", renderer);
 	if (player == nullptr) {
-		cout << "Can not create player" << endl;
+		printError("Can not create player");
 		exit(1);
 	}
     player->init();
@@ -105,7 +108,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	unsigned char nrEnemy = map->getNrEnemy();
 	enemy = new Component * [nrEnemy];
 	if (enemy == nullptr) {
-		cout << "Can not create enemys" << endl;
+		printError("Can not create enemys");
 		exit(1);
 	}
 	for (unsigned char i = 0; i < nrEnemy; i++) {
@@ -113,7 +116,8 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		if (enemy[i] != nullptr) {
 			enemy[i]->init();
 		} else {
-			cout << "Can not create a enenmy";
+			printError("Can not load all caracters");
+			exit(1);
 		}
 	}
 
@@ -216,6 +220,10 @@ void Game::handleEvents()
 	if (exitLevel == nullptr) {
 		if (player->collectedAll()) {
 			exitLevel = new ExitBlock(renderer, (*exitLvl)[0], (*exitLvl)[1]);
+			if (exitLevel == nullptr) {
+				printError("Can not load object ExitBlock");
+				exit(1);
+			}
 		}
 	} else if (player->getPosition().x == exitLevel->getX() and player->getPosition().y == exitLevel->getY()) {
 		nextLevel();
@@ -302,12 +310,14 @@ void Game::nextLevel() {
 
 		enemy = new Component * [nrEnemy];
 		if (enemy == nullptr) {
+			printError("Can not create enemys");
 			exit(1);
 		}
 
 		for (unsigned char i = 0; i < nrEnemy; i++) {
 			enemy[i] = new Enemy("assets/enemy.png", "assets/enemy_r.png", renderer);
 			if (enemy[i] != nullptr) {
+				printError("Can not load all caracters");
 				enemy[i]->init();
 			}
 		}

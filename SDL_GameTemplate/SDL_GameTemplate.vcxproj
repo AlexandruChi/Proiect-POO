@@ -142,10 +142,12 @@
     <ClCompile Include="ExitBlock.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Medkit.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="printError.cpp" />
     <ClCompile Include="randomNumber.cpp" />
     <ClCompile Include="Rifle.cpp" />
     <ClCompile Include="setUIpaths.cpp" />
@@ -164,6 +166,7 @@
     <ClInclude Include="ExitBlock.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="LevelManager.h" />
     <ClInclude Include="Levels.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Medkit.h" />

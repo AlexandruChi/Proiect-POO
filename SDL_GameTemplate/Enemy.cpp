@@ -11,14 +11,9 @@ unsigned long long calculateDistance(pair<long long, long long> A, pair<long lon
 constexpr auto moveDelay = 3;
 constexpr auto attackDelay = 1;
 
-Enemy::Enemy(const char* path_r, const char* path_l, SDL_Renderer* renderer)
+Enemy::Enemy(const char* path_r, const char* path_l, SDL_Renderer* renderer) : attackTimer(attackDelay, true), changeDirectionTimer(moveDelay, true)
 {
     this->renderer = renderer;
-    changeDirectionTimer = new Timer(moveDelay, true);
-    attackTimer = new Timer(attackDelay, true);
-    if (changeDirectionTimer == nullptr) {
-        exit(1);
-    }
     setTex(path_r, path_l);
 
     hitbox = {};
@@ -30,10 +25,7 @@ Enemy::Enemy(const char* path_r, const char* path_l, SDL_Renderer* renderer)
     health = maxHealth;
 }
 
-Enemy::~Enemy()
-{
-    delete changeDirectionTimer;
-}
+Enemy::~Enemy() {}
 
 void Enemy::init()
 {
@@ -76,12 +68,12 @@ void Enemy::update()
 
     if (position.x == Game::player->getPosition().x and position.y == Game::player->getPosition().y) {
         setTravelDirection(stop);
-        if (attackTimer->run()) {
+        if (attackTimer.run()) {
             Game::player->decHealth(damage);
         }
     } else if (calculateDistance({ position.xPX, position.yPX }, { Game::player->getPosition().xPX, Game::player->getPosition().yPX }) <= range and lineOfSight(Game::player->getPosition())) {
         follow(Game::player->getPosition());
-    } else if (changeDirectionTimer->run()) {
+    } else if (changeDirectionTimer.run()) {
         setTravelDirection((TravelDirection)randomNumber(0, 8));
     }
 

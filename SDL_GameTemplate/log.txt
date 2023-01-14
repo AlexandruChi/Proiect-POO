@@ -1,4 +1,7 @@
 Subsystems initialized
 Window created
 Renderer created
-Game cleaned
+create game
+create game
+create game
+create game
