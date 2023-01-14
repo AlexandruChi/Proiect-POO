@@ -5,8 +5,8 @@
 #include "UI.h"
 #include "Enemy.h"
 #include "GameObject.h"
-#include "Colectables.h"
 #include "ExitBlock.h"
+#include "LevelManager.h"
 
 void printError(const char* messege);
 
@@ -22,12 +22,7 @@ Player* Game::player;
 
 TextureUI_path setUIpaths();
 
-unsigned char nrEnemy;
-size_t nrClc;
-unsigned int (*exitLvl)[2];
-unsigned int (*clcLvl)[3];
-
-Game::Game(): isRunning(false), window(nullptr), renderer(nullptr), mouseLeft(false) {}
+Game::Game(): isRunning(false), window(nullptr), renderer(nullptr), mouseLeft(false), nrEnemy(0), nrClc(0), exitLvl(0), clcLvl(0) {}
 
 Game::~Game()
 {
@@ -105,7 +100,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     TextureUI_path textureUI_path = setUIpaths();
     ui = new UI(&textureUI_path, renderer);
 
-	unsigned char nrEnemy = map->getNrEnemy();
+	unsigned int nrEnemy = map->getNrEnemy();
 	enemy = new Component * [nrEnemy];
 	if (enemy == nullptr) {
 		printError("Can not create enemys");
@@ -121,9 +116,9 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		}
 	}
 
-	nrClc = nrClcLvl1;
-	exitLvl = &exitLvl1;
-	clcLvl = clcLvl1;
+	nrClc = LevelManager::getNrColectables();
+	exitLvl = LevelManager::getExit();
+	clcLvl = LevelManager::getCollectables();
 
 	collectables = GameObject::createGameObjects(clcLvl, nrClc, renderer);
 
@@ -282,7 +277,7 @@ void Game::clean() const
 }
 
 Component* Game::searchHitbox(const Position& position) {
-	for (int i = 0; i < map->getNrEnemy(); i++) {
+	for (unsigned int i = 0; i < map->getNrEnemy(); i++) {
 		if (enemy[i] != nullptr) {
 			if (position.xPX > enemy[i]->getHitbox().xPX1 and position.xPX < enemy[i]->getHitbox().xPX2) {
 				if (position.yPX > enemy[i]->getHitbox().yPX1 and position.yPX < enemy[i]->getHitbox().yPX2) {
@@ -300,7 +295,7 @@ void Game::nextLevel() {
 		isRunning = false;
 	} else {
 		ui->nextLevel();
-		player->changeLevel(map->getCurentMap());
+		player->changeLevel();
 
 		if (enemy != nullptr) {
 			delete[] enemy;
@@ -317,8 +312,10 @@ void Game::nextLevel() {
 		for (unsigned char i = 0; i < nrEnemy; i++) {
 			enemy[i] = new Enemy("assets/enemy.png", "assets/enemy_r.png", renderer);
 			if (enemy[i] != nullptr) {
-				printError("Can not load all caracters");
 				enemy[i]->init();
+			} else {
+				printError("Can not load all caracters");
+				exit(1);
 			}
 		}
 
@@ -329,23 +326,9 @@ void Game::nextLevel() {
 			delete[] collectables;
 		}
 
-		switch (map->getCurentMap()) {
-			case 1:
-				nrClc = nrClcLvl1;
-				exitLvl = &exitLvl1;
-				clcLvl = clcLvl1;
-				break;
-			case 2:
-				nrClc = nrClcLvl2;
-				exitLvl = &exitLvl2;
-				clcLvl = clcLvl2;
-				break;
-			case 3:
-				nrClc = nrClcLvl3;
-				exitLvl = &exitLvl3;
-				clcLvl = clcLvl3;
-				break;
-		}
+		nrClc = LevelManager::getNrColectables();
+		exitLvl = LevelManager::getExit();
+		clcLvl = LevelManager::getCollectables();
 
 		collectables = GameObject::createGameObjects(clcLvl, nrClc, renderer);
 		exitLevel = nullptr;

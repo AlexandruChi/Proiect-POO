@@ -18,7 +18,12 @@ Map::Map(SDL_Renderer* renderer)
 
 	curentMap = 1;
 
-	LoadMap(lvl1);
+	LevelManager::getData("campaine.txt");
+	nrLevels = LevelManager::getNrLevels();
+
+	LevelManager::readLevel(curentMap);
+	nrEnemy = LevelManager::getNrEnemy();
+	LoadMap(LevelManager::getMap());
 
 	src.x = 0;
 	src.y = 0;
@@ -88,40 +93,21 @@ void Map::DrawMap()
 }
 
 bool Map::loadNextMap() {
-	if (curentMap == nrLevels) {
+	curentMap++;
+	bool ok = LevelManager::readLevel(curentMap);
+	if (!ok) {
 		return false;
 	}
-	curentMap++;
-	switch (curentMap) {
-		case 2:
-			LoadMap(lvl2);
-			break;
-		case 3:
-			LoadMap(lvl3);
-			break;
-	}
+	LoadMap(LevelManager::getMap());
 	return true;
 }
 
-unsigned char Map::getCurentMap() {
+unsigned int Map::getCurentMap() {
 	return curentMap;
 }
 
-unsigned char Map::getNrEnemy() {
-	switch (curentMap) {
-		case 1:
-			return nrEnmLvl1;
-			break;
-		case 2:
-			return nrEnmLvl2;
-			break;
-		case 3:
-			return nrEnmLvl3;
-			break;
-		default:
-			return 0;
-			break;
-	}
+unsigned int Map::getNrEnemy() {
+	return nrEnemy;
 }
 
 bool Map::canSeeThrew(unsigned int x, unsigned int y) {

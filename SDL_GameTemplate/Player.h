@@ -25,7 +25,7 @@ public:
 	void addCollected();
 
 	bool collectedAll();
-	void changeLevel(unsigned char level);
+	void changeLevel();
 
 	void changeWeapon(unsigned char weapon);
 

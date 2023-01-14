@@ -6,14 +6,13 @@
 #include <utility>
 #include "Ammo.h"
 #include "Game.h"
+#include "LevelManager.h"
 
 void printError(const char* messege);
 
 using namespace std;
 
 unsigned long long calculateDistance(pair<long long, long long> A, pair<long long, long long> B);
-
-extern size_t nrClc;
 
 Player::Player(const char* path_r, const char* path_l, SDL_Renderer* renderer) {
     this->renderer = renderer;
@@ -55,8 +54,10 @@ void Player::init()
    srcRect.w = srcRect.h = 32;
    destRect.w = destRect.h = 64;
 
-   position.x = playerSpawnXLvl1;
-   position.y = playerSpawnYLvl1;
+   unsigned int(*spawn)[2] = LevelManager::getPlayerSpawn();
+
+   position.x = (*spawn)[0];
+   position.y = (*spawn)[1];
 
    position.xPX = position.x * 32 + 32 / 2;
    position.yPX = position.y * 32 + 32 / 2;
@@ -79,6 +80,8 @@ void Player::update() {
             clcAll = true;
             collected = 0;
         }
+
+        size_t nrClc = LevelManager::getNrColectables();
 
         for (size_t i = 0; i < nrClc; i++) {
             if (Game::collectables[i] != nullptr) {
@@ -170,23 +173,13 @@ bool Player::collectedAll() {
     return clcAll;
 }
 
-void Player::changeLevel(unsigned char level) {
+void Player::changeLevel() {
     clcAll = false;
 
-    switch (level) {
-        case 1:
-            position.x = playerSpawnXLvl1;
-            position.y = playerSpawnYLvl1;
-            break;
-        case 2:
-            position.x = playerSpawnXLvl2;
-            position.y = playerSpawnYLvl2;
-            break;
-        case 3:
-            position.x = playerSpawnXLvl3;
-            position.y = playerSpawnYLvl3;
-            break;
-    }
+    unsigned int(*spawn)[2] = LevelManager::getPlayerSpawn();
+
+    position.x = (*spawn)[0];
+    position.y = (*spawn)[1];
 
     position.xPX = position.x * 32 + 32 / 2;
     position.yPX = position.y * 32 + 32 / 2;

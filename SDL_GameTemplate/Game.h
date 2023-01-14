@@ -8,10 +8,6 @@
 
 class Game
 {
-	static Game* game;
-	static Component** enemy;;
-	static GameObject* exitLevel;
-
 public:
 	Game();
 	~Game();
@@ -37,6 +33,15 @@ private:
 	bool isRunning;
 	SDL_Window* window;
 	SDL_Renderer* renderer;
+
+	static Game* game;
+	static Component** enemy;;
+	static GameObject* exitLevel;
+
+	unsigned int nrEnemy;
+	size_t nrClc;
+	unsigned int(*exitLvl)[2];
+	unsigned int(*clcLvl)[3];
 
 	bool mouseLeft;
 };

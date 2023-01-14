@@ -1,7 +1,8 @@
 Subsystems initialized
 Window created
 Renderer created
-create game
-create game
-create game
-create game
+Can not load all caracters
+Can not load all caracters
+Can not load all caracters
+Can not load all caracters
+Can not load all caracters

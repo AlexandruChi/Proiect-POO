@@ -11,15 +11,6 @@ constexpr auto characterDeltaY = 56;
 constexpr auto hitboxDeltaX = 32;
 constexpr auto hitboxDeltaY = 46;
 
-constexpr auto playerSpawnXLvl1 = 2;
-constexpr auto playerSpawnYLvl1 = 4;
-
-constexpr auto playerSpawnXLvl2 = 1;
-constexpr auto playerSpawnYLvl2 = 17;
-
-constexpr auto playerSpawnXLvl3 = 2;
-constexpr auto playerSpawnYLvl3 = 18;
-
 class Character : public Component {
 protected:
 	SDL_Texture* texture{};

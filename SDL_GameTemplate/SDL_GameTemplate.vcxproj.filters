@@ -117,9 +117,6 @@
     <ClInclude Include="Medkit.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Colectables.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="ExitBlock.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -243,5 +240,9 @@
     <Font Include="assets\Reach Story.ttf">
       <Filter>assets</Filter>
     </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="campaine.txt" />
+    <Text Include="log.txt" />
   </ItemGroup>
 </Project>

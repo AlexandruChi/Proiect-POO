@@ -7,13 +7,13 @@ using namespace std;
 
 void printError(const char* messege);
 
-unsigned char LevelManager::nrLevels;
-unsigned char LevelManager::nrEnmLvl;
+unsigned int LevelManager::nrLevels;
+unsigned int LevelManager::nrEnmLvl;
 size_t LevelManager::nrClcLvl;
 int LevelManager::Lvl[20][25];
-unsigned char LevelManager::exitLvl[2];
-unsigned char LevelManager::playerSpawn[2];
-unsigned char(*LevelManager::clcLvl)[3];
+unsigned int LevelManager::exitLvl[2];
+unsigned int LevelManager::playerSpawn[2];
+unsigned int(*LevelManager::clcLvl)[3];
 
 ifstream LevelManager::campaine;
 
@@ -43,10 +43,18 @@ void LevelManager::getData(const char* campaineFile) {
             }
         }
         nrLevels = atoi(buffer.c_str());
+        if (!nrLevels) {
+            printError("Number of levels can not be 0");
+            exit(0);
+        }
     } else {
         printError("Campaine file error");
         exit(1);
     }
+}
+
+unsigned int LevelManager::getNrLevels() {
+    return nrLevels;
 }
 
 bool LevelManager::readLevel(unsigned char level) {
@@ -54,19 +62,24 @@ bool LevelManager::readLevel(unsigned char level) {
         return false;
     }
 
+    campaine.clear();
+    campaine.seekg(0, std::ios::beg);
+
     string buffer;
 
     bool foundLevel = false;
 
-    while (cin >> buffer and !foundLevel) {
+    cin >> buffer;
+
+     do {
         if (!strcmp(buffer.c_str(), "lvl")) {
-            unsigned char lvl;
+            unsigned int lvl;
             cin >> lvl;
             if (lvl == level) {
                 foundLevel = true;
             }
         }
-    }
+    } while (!foundLevel and cin >> buffer);
 
     if (!foundLevel) {
         string error = "Can Not find level ";
@@ -83,7 +96,9 @@ bool LevelManager::readLevel(unsigned char level) {
     bool foundClcLvl = false;
     bool foundPlayerSpawn = false;
 
-    while (cin >> buffer and strcmp(buffer.c_str(), "lvl")) {
+    cin >> buffer;
+
+     do {
         if (!strcmp(buffer.c_str(), "nrEnemy")) {
             cin >> nrEnmLvl;
             foundNrEnemy = true;
@@ -92,7 +107,7 @@ bool LevelManager::readLevel(unsigned char level) {
             foundNrClc = true;
         } else if (!strcmp(buffer.c_str(), "map")) {
             for (int i = 0; i < 20; i++) {
-                for (int j = 0; i < 25; j++) {
+                for (int j = 0; j < 25; j++) {
                     cin >> Lvl[i][j];
                 }
             }
@@ -102,7 +117,7 @@ bool LevelManager::readLevel(unsigned char level) {
             foundExitLvl = true;
         } else if (!strcmp(buffer.c_str(), "clc")) {
             if (foundNrClc) {
-                clcLvl = new unsigned char[nrClcLvl][3];
+                clcLvl = new unsigned int[nrClcLvl][3];
                 if (clcLvl == nullptr) {
                     string error = "Can not allocate space for level ";
                     error += to_string(level);
@@ -120,7 +135,7 @@ bool LevelManager::readLevel(unsigned char level) {
             cin >> playerSpawn[0] >> playerSpawn[1];
             foundPlayerSpawn = true;
         }
-    }
+    } while (strcmp(buffer.c_str(), "end") and cin >> buffer);
 
     if (!foundNrEnemy or !foundNrClc or !foundLvl or !foundExitLvl or !foundClcLvl or !foundPlayerSpawn) {
         string error = "Can not read data for level ";
@@ -128,9 +143,6 @@ bool LevelManager::readLevel(unsigned char level) {
         printError(error.c_str());
         exit(1);
     }
-
-    campaine.clear();
-    campaine.seekg(0, std::ios::beg);
 
     return true;
 }
@@ -147,14 +159,18 @@ int(*LevelManager::getMap())[25] {
     return Lvl;
 }
 
-unsigned char(*LevelManager::getExit())[2] {
+unsigned int(*LevelManager::getExit())[2] {
     return &exitLvl;
 }
 
-unsigned char(*LevelManager::getCollectables())[3] {
+unsigned int(*LevelManager::getCollectables())[3] {
     return clcLvl;
 }
 
 void LevelManager::closeLevelManager() {
     campaine.close();
+}
+
+unsigned int(*LevelManager::getPlayerSpawn())[2] {
+    return &playerSpawn;
 }

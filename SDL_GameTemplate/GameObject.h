@@ -9,7 +9,7 @@ enum GameObjectType {
 class GameObject
 {
 public:
-	static GameObject** createGameObjects(unsigned int (*v)[3], size_t nr, SDL_Renderer* renderer);
+	static GameObject** createGameObjects(unsigned int(*v)[3], size_t nr, SDL_Renderer* renderer);
 
 	GameObject(const char* textureSheet, GameObjectType type, SDL_Renderer* renderer, int x, int y);
 	virtual ~GameObject();

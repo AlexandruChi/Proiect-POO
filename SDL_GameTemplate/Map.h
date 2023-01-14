@@ -10,8 +10,8 @@ public:
 	void DrawMap();
 
 	bool loadNextMap();
-	unsigned char getCurentMap();
-	unsigned char getNrEnemy();
+	unsigned int getCurentMap();
+	unsigned int getNrEnemy();
 
 	bool canSeeThrew(unsigned int x, unsigned int y);
 	bool canWalkOn(unsigned int x, unsigned int y);
@@ -29,5 +29,9 @@ private:
 
 	int map[20][25];
 
-	unsigned char curentMap;
+	unsigned int nrLevels;
+
+	unsigned int nrEnemy;
+
+	unsigned int curentMap;
 };
