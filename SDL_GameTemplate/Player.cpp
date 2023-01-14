@@ -139,6 +139,12 @@ void Player::setUI() {
 }
 
 void Player::attack(const Position& position) {
+    if (position.xPX < this->position.xPX) {
+        texture = altTexture[characterTextureLeft];
+    } else {
+        texture = altTexture[characterTextureRight];
+    }
+
     weapon->attack(*this, position);
 }
 
