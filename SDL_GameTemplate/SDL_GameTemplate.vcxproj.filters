@@ -243,6 +243,5 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="campaine.txt" />
-    <Text Include="log.txt" />
   </ItemGroup>
 </Project>
