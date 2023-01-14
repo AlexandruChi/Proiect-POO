@@ -115,8 +115,9 @@ void Player::update() {
 
 void Player::setUI() {
     unsigned char ammo = 0;
+    bool ok = weapon->hasAmmo(ammo);
 
-    Game::ui->setAmmo(weapon->hasAmmo(ammo), ammo);
+    Game::ui->setAmmo(ok, ammo);
     Game::ui->setWeapon(weapon->getType());
     Game::ui->setHealth(health);
 
