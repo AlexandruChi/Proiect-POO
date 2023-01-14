@@ -11,13 +11,7 @@ using namespace std;
 
 unsigned long long calculateDistance(pair<long long, long long> A, pair<long long, long long> B);
 
-extern Map* map;
 
-extern Game* game;
-
-extern UI* ui;
-
-extern GameObject** collectables;
 
 extern size_t nrClc;
 
@@ -78,24 +72,24 @@ void Player::update() {
         }
 
         for (size_t i = 0; i < nrClc; i++) {
-            if (collectables[i] != nullptr) {
-                if (collectables[i]->getX() == position.x and collectables[i]->getY() == position.y) {
-                    switch (collectables[i]->getType()) {
+            if (Game::collectables[i] != nullptr) {
+                if (Game::collectables[i]->getX() == position.x and Game::collectables[i]->getY() == position.y) {
+                    switch (Game::collectables[i]->getType()) {
                         case document:
                             addCollected();
-                            delete collectables[i];
-                            collectables[i] = nullptr;
+                            delete Game::collectables[i];
+                            Game::collectables[i] = nullptr;
                             break;
                         case ammo:
-                            altWeapon[1]->addAmmo(((Ammo*)collectables[i])->getAmmo());
-                            delete collectables[i];
-                            collectables[i] = nullptr;
+                            altWeapon[1]->addAmmo(((Ammo*)Game::collectables[i])->getAmmo());
+                            delete Game::collectables[i];
+                            Game::collectables[i] = nullptr;
                             break;
                         case medkit:
                             if (health < maxHealth) {
                                 incHealth();
-                                delete collectables[i];
-                                collectables[i] = nullptr;
+                                delete Game::collectables[i];
+                                Game::collectables[i] = nullptr;
                             }
                             break;
                     }
@@ -110,26 +104,26 @@ void Player::update() {
 void Player::setUI() {
     unsigned char ammo = 0;
 
-    ui->setAmmo(weapon->hasAmmo(ammo), ammo);
-    ui->setWeapon(weapon->getType());
-    ui->setHealth(health);
+    Game::ui->setAmmo(weapon->hasAmmo(ammo), ammo);
+    Game::ui->setWeapon(weapon->getType());
+    Game::ui->setHealth(health);
 
     if (clcAll) {
-        ui->setCollected(2);
+        Game::ui->setCollected(2);
     } else {
         switch (collected) {
             case 0:
-                ui->setCollected(0);
+                Game::ui->setCollected(0);
                 break;
             case 1:
-                ui->setCollected(1);
+                Game::ui->setCollected(1);
                 break;
             default:
                 break;
         }
     }
 
-    ui->setMedals(medals);
+    Game::ui->setMedals(medals);
 }
 
 void Player::attack(const Position& position) {
@@ -194,4 +188,8 @@ void Player::changeLevel(unsigned char level) {
 
 void Player::changeWeapon(unsigned char weapon) {
     this->weapon = altWeapon[weapon];
+}
+
+Hitbox Player::getHitbox() const {
+    return Hitbox();
 }

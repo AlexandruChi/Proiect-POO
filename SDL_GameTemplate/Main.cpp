@@ -24,7 +24,7 @@ int main(int argc, char* args[])
 
 	Game *game = new Game();
 
-	game->init("GameTitle", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, false);
+	game->init("GameTitle", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, true);
 
 	while (game->running())
 	{

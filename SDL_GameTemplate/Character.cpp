@@ -1,9 +1,6 @@
 #include <cmath>
-#include "Character.h"
-#include "Map.h"
+#include "Game.h"
 #include "TextureManager.h"
-
-extern Map* map;
 
 void Character::move() {
     char signX = 0, signY = 0;
@@ -56,14 +53,14 @@ void Character::move() {
         signX = 0;
     }
 
-    if (!map->canWalkOn(((int)position.tmpX) / 32, ((int)position.tmpY) / 32)) {
+    if (!Game::map->canWalkOn(((int)position.tmpX) / 32, ((int)position.tmpY) / 32)) {
         position.tmpX -= speed * signX;
         position.tmpY -= speed * signY;
 
-        if (signY and map->canWalkOn(((int)position.tmpX) / 32, ((int)(position.tmpY + speed * signY)) / 32)) {
+        if (signY and Game::map->canWalkOn(((int)position.tmpX) / 32, ((int)(position.tmpY + speed * signY)) / 32)) {
             position.tmpY += speed * signY;
         }
-        if (signX and map->canWalkOn(((int)(position.tmpX + speed * signX)) / 32, ((int)position.tmpY) / 32)) {
+        if (signX and Game::map->canWalkOn(((int)(position.tmpX + speed * signX)) / 32, ((int)position.tmpY) / 32)) {
             position.tmpX += speed * signX;
         }
     }
@@ -139,7 +136,7 @@ bool Character::lineOfSight(const Position& position) const {
     int err = (dx > dy ? dx : -dy) / 2;
 
     while (true) {
-        if (!map->canSeeThrew(x1 / 32, y1 / 32)) {
+        if (!Game::map->canSeeThrew(x1 / 32, y1 / 32)) {
             return false;
         }
 

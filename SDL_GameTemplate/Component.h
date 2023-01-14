@@ -27,8 +27,12 @@ public:
    virtual void draw() = 0;
 
    virtual Position getPosition() const = 0 ;
+   virtual Hitbox getHitbox() const = 0;
+   
    virtual bool lineOfSight(const Position& position) const = 0;
 
    virtual void decHealth(unsigned char health = 1) = 0;
    virtual void incHealth(unsigned char health = 1) = 0;
+
+   virtual bool isDead() = 0;
 };

@@ -1,8 +1,6 @@
 #include "Rifle.h"
 #include "Game.h"
 
-extern Game* game;
-
 Rifle::Rifle(unsigned char damage, unsigned char ammo, double attackDelay) : ammo(ammo), damage(damage), attackTimer(attackDelay, true) {}
 
 bool Rifle::hasAmmo(unsigned char& ammo) {
@@ -17,7 +15,7 @@ bool Rifle::hasRange(unsigned char& range) {
 void Rifle::attack(const Component& player, const Position& position) {
 	if (attackTimer.run() and ammo) {
 		decAmmo();
-		Component* character = game->searchHitbox(position);
+		Component* character = Game::searchHitbox(position);
 		if (character != nullptr and (player.lineOfSight(position) or player.lineOfSight(character->getPosition()))) {
 			character->decHealth(damage);
 		}

@@ -28,4 +28,6 @@ public:
 	void changeLevel(unsigned char level);
 
 	void changeWeapon(unsigned char weapon);
+
+	Hitbox getHitbox() const;
 };

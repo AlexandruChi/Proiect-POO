@@ -10,15 +10,15 @@
 
 using namespace std;
 
-TextureUI_path setUIpaths();
+Component** Game::enemy;
+GameObject** Game::collectables;
+GameObject* Game::exitLevel;
+UI* Game::ui;
+Game* Game::game;
+Map* Game::map;
+Player* Game::player;
 
-Game* game;
-Map* map;
-UI* ui;
-Player* player;
-Enemy** enemy;
-GameObject** collectables;
-ExitBlock* exitLevel;
+TextureUI_path setUIpaths();
 
 unsigned char nrEnemy;
 size_t nrClc;
@@ -103,7 +103,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     ui = new UI(&textureUI_path, renderer);
 
 	unsigned char nrEnemy = map->getNrEnemy();
-	enemy = new Enemy * [nrEnemy];
+	enemy = new Component * [nrEnemy];
 	if (enemy == nullptr) {
 		cout << "Can not create enemys" << endl;
 		exit(1);
@@ -273,7 +273,7 @@ void Game::clean() const
 	std::cout << "Game cleaned" << std::endl;
 }
 
-Character* Game::searchHitbox(const Position& position) const {
+Component* Game::searchHitbox(const Position& position) {
 	for (int i = 0; i < map->getNrEnemy(); i++) {
 		if (enemy[i] != nullptr) {
 			if (position.xPX > enemy[i]->getHitbox().xPX1 and position.xPX < enemy[i]->getHitbox().xPX2) {
@@ -300,7 +300,7 @@ void Game::nextLevel() {
 
 		nrEnemy = map->getNrEnemy();
 
-		enemy = new Enemy * [nrEnemy];
+		enemy = new Component * [nrEnemy];
 		if (enemy == nullptr) {
 			exit(1);
 		}

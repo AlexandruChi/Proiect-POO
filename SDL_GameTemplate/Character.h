@@ -47,7 +47,8 @@ public:
 	void addMovement(TravelDirection travelDirection);
 	void subMovement(TravelDirection travelDirection);
 
-	Position getPosition() const;
+	virtual Position getPosition() const;
+	virtual Hitbox getHitbox() const = 0;
 
 	void move();
 

@@ -1,17 +1,12 @@
 #include <utility>
 #include <cmath>
+#include "Game.h"
 #include "Enemy.h"
-#include "Map.h"
-#include "Player.h"
 
 using namespace std;
 
 long long randomNumber(long long low, long long high);
 unsigned long long calculateDistance(pair<long long, long long> A, pair<long long, long long> B);
-
-extern Map* map;
-
-extern Player* player;
 
 constexpr auto moveDelay = 3;
 constexpr auto attackDelay = 1;
@@ -56,11 +51,11 @@ void Enemy::init()
         position.xPX = (unsigned int)randomNumber(36, 768);
         position.yPX = (unsigned int)randomNumber(65, 608);
 
-        if (!map->canWalkOn(position.xPX / 32, position.yPX / 32)) {
+        if (!Game::map->canWalkOn(position.xPX / 32, position.yPX / 32)) {
             ok = false;
         }
 
-        if (calculateDistance({position.xPX, position.yPX}, {player->getPosition().xPX, player->getPosition().yPX}) <= range) {
+        if (calculateDistance({position.xPX, position.yPX}, {Game::player->getPosition().xPX, Game::player->getPosition().yPX}) <= range) {
             ok = false;
         }
     } while (!ok);
@@ -79,13 +74,13 @@ void Enemy::update()
         return;
     }
 
-    if (position.x == player->getPosition().x and position.y == player->getPosition().y) {
+    if (position.x == Game::player->getPosition().x and position.y == Game::player->getPosition().y) {
         setTravelDirection(stop);
         if (attackTimer->run()) {
-            player->decHealth(damage);
+            Game::player->decHealth(damage);
         }
-    } else if (calculateDistance({ position.xPX, position.yPX }, { player->getPosition().xPX, player->getPosition().yPX }) <= range and lineOfSight(player->getPosition())) {
-        follow(player->getPosition());
+    } else if (calculateDistance({ position.xPX, position.yPX }, { Game::player->getPosition().xPX, Game::player->getPosition().yPX }) <= range and lineOfSight(Game::player->getPosition())) {
+        follow(Game::player->getPosition());
     } else if (changeDirectionTimer->run()) {
         setTravelDirection((TravelDirection)randomNumber(0, 8));
     }
@@ -98,7 +93,7 @@ void Enemy::update()
     hitbox.yPX2 = position.yPX;
 }
 
-Hitbox Enemy::getHitbox() {
+Hitbox Enemy::getHitbox() const {
     return hitbox;
 }
 

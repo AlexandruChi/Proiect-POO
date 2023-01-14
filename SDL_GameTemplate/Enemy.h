@@ -16,7 +16,7 @@ public:
 	void init() override;
 	void update() override;
 
-	Hitbox getHitbox();
+	Hitbox getHitbox() const;
 
 	void setTravelDirection(TravelDirection travelDirection);
 	void follow(const Position& position);
