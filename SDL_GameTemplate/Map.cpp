@@ -57,32 +57,32 @@ void Map::DrawMap()
 			dest.x = column * 32;
 			dest.y = row * 32;
 			switch (type) {
-				case 0:
+				case ::water:
 				{
 					TextureManager::Draw(this->water, src, dest, renderer);
 					break;
 				}
-				case 1:
+				case ::ground:
 				{
 					TextureManager::Draw(this->ground, src, dest, renderer);
 					break;
 				}
-				case 2:
+				case ::flooring:
 				{
 					TextureManager::Draw(this->flooring, src, dest, renderer);
 					break;
 				}
-				case 3:
+				case ::wall:
 				{
 					TextureManager::Draw(this->wall, src, dest, renderer);
 					break;
 				}
-				case 4:
+				case ::bridge:
 				{
 					TextureManager::Draw(this->bridge, src, dest, renderer);
 					break;
 				}
-				case 5:
+				case ::bridger_r:
 					TextureManager::Draw(this->bridge_r, src, dest, renderer);
 					break;
 				default:
@@ -99,6 +99,7 @@ bool Map::loadNextMap() {
 		return false;
 	}
 	LoadMap(LevelManager::getMap());
+	nrEnemy = LevelManager::getNrEnemy();
 	return true;
 }
 
