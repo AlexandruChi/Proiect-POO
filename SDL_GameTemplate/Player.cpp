@@ -24,7 +24,7 @@ Player::Player(const char* path_r, const char* path_l, SDL_Renderer* renderer) {
         exit(1);
     }
 
-    altWeapon[0] = new Sword(1, 128, 0.5);
+    altWeapon[0] = new Sword(1, 64, 0.5);
     altWeapon[1] = new Rifle(2, 0, 0.3);
 
     if (altWeapon[0] == nullptr or altWeapon[1] == nullptr) {
