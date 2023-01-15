@@ -18,7 +18,6 @@ Component** Game::enemy;
 GameObject** Game::collectables;
 GameObject* Game::exitLevel;
 UI* Game::ui;
-Game* Game::game;
 Map* Game::map;
 Player* Game::player;
 
@@ -135,8 +134,6 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 
 	collectables = GameObject::createGameObjects(clcLvl, nrClc, renderer);
-
-	game = this;
 }
 
 void Game::handleEvents()

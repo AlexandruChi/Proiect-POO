@@ -37,7 +37,6 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 
-	static Game* game;
 	static Component** enemy;;
 	static GameObject* exitLevel;
 
