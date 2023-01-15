@@ -171,6 +171,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Medkit.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Rifle.h" />
     <ClInclude Include="Sword.h" />
     <ClInclude Include="TextureManager.h" />
@@ -196,6 +197,7 @@
     <Image Include="assets\health_3.png" />
     <Image Include="assets\health_4.png" />
     <Image Include="assets\health_5.png" />
+    <Image Include="assets\icon.ico" />
     <Image Include="assets\medals_0.png" />
     <Image Include="assets\medals_1.png" />
     <Image Include="assets\medals_2.png" />
@@ -211,6 +213,7 @@
     <Image Include="assets\water.png" />
     <Image Include="assets\weapon_0.png" />
     <Image Include="assets\weapon_1.png" />
+    <Image Include="icon1.ico" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="assets\AnglicanText.ttf" />
@@ -218,6 +221,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="campaine.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Beim letzten Krieg.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

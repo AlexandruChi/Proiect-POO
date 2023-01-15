@@ -126,6 +126,7 @@
     <ClInclude Include="LevelManager.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="assets">
@@ -235,6 +236,8 @@
     <Image Include="assets\exit.png">
       <Filter>assets</Filter>
     </Image>
+    <Image Include="icon1.ico" />
+    <Image Include="assets\icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="assets\AnglicanText.ttf">
@@ -246,5 +249,8 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="campaine.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Beim letzten Krieg.rc" />
   </ItemGroup>
 </Project>
